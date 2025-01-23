@@ -9,7 +9,8 @@ const FormComponent = dynamic(() => import('@/components/FormComponent'), { ssr:
 const Success: React.FC = () => {
     const router = useRouter();
     const [isFormVisible, setIsFormVisible] = useState(true); // Стейт для управления видимостью формы
-    const sessionId = router.query.session_id; // Убедитесь, что этот идентификатор корректный
+    const sessionId = router.query.session_id || '';
+
 
     const handleFormClose = () => {
         setIsFormVisible(false);

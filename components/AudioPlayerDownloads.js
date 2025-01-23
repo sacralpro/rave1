@@ -16,19 +16,21 @@ const AudioPlayerDownloads = () => {
         const audioElements = audioRefs.current;
 
         audioElements.forEach(audio => {
-            audio.addEventListener("timeupdate", () => {
+            const handler = () => {
                 if (audio) {
                     const progressBar = document.getElementById(`progress-bar-${audio.dataset.index}`);
                     if (progressBar) {
                         progressBar.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
                     }
                 }
-            });
+            };
+            
+            audio.addEventListener("timeupdate", handler);
         });
 
         return () => {
             audioElements.forEach(audio => {
-                audio.removeEventListener("timeupdate", () => {});
+                audio.removeEventListener("timeupdate", handler);
             });
         };
     }, []);
@@ -74,8 +76,8 @@ const AudioPlayerDownloads = () => {
             {tracks.map((track, index) => (
                 <div
                     key={track.id}
-                    className={`relative flex flex-col text-white rounded-lg mx-2 my-2 bg-gray-900 ${playingTrackIndex === index ? "border-2 border-pink-400" : ""} p-2`}  // Added padding for better spacing
-                    style={{ width: '600px', height: '100px' }} // Fixed dimensions
+                    className={`relative flex flex-col text-white rounded-lg mx-2 my-2 bg-gray-900 ${playingTrackIndex === index ? "border-2 border-pink-400" : ""} p-2`}
+                    style={{ width: '600px', height: '100px' }}
                 >
                     <div className="flex items-center justify-between w-full">
                         <button onClick={() => handleTrackClick(index)} className="text-white">
@@ -86,7 +88,6 @@ const AudioPlayerDownloads = () => {
                             <FaDownload />
                         </a>
                     </div>
-                    {/* Полоса для перемотки с прижатием к низу */}
                     <div
                         className="w-full h-1 bg-gray-600 mt-2 cursor-pointer rounded-full"
                         onClick={(e) => handleProgressClick(e, index)}
@@ -96,7 +97,7 @@ const AudioPlayerDownloads = () => {
                             style={{
                                 width: "0%",
                                 height: "100%",
-                                backgroundColor: "pink", // Set color of the playing progress bar to pink
+                                backgroundColor: "pink",
                                 transition: "width 0.2s ease",
                             }}
                         />
@@ -109,12 +110,11 @@ const AudioPlayerDownloads = () => {
                     />
                 </div>
             ))}
-            {/* Responsive Design */}
             <style jsx>{`
                 @media (max-width: 640px) { 
                     div {
-                        width: 100%; // Full width on smaller screens
-                        height: auto; // Allow height to adjust accordingly
+                        width: 100%;
+                        height: auto;
                     }
                 }
             `}</style>

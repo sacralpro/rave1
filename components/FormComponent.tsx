@@ -3,26 +3,26 @@
 import { useState } from 'react';
 import Lottie from 'lottie-react';
 import animationData from "@/public/lottie/success.json"; 
-import useCreateDBs from '@/hooks/useCreateDBs'; // Make sure this import points to the correct path
+import useCreateDBs from '@/hooks/useCreateDBs'; // Подтверждайте, что этот импорт указывает на правильный путь
 
-// Define props type
+// Определите типы пропсов
 interface FormComponentProps {
     onClose: () => void;
 }
 
-// Form component
+// Компонент формы
 const FormComponent: React.FC<FormComponentProps> = ({ onClose }) => {
     const [telegram, setTelegram] = useState('');
     const [email, setEmail] = useState('');
-    
-    // Form submission function
+
+    // Функция отправки формы
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
-            // Call the database function
-            await useCreateDBs(telegram, email); // This should not return a Promise directly as a hook
-            onClose(); // Close form after successful submission
+            // Вызов функции базы данных
+            await useCreateDBs(telegram, email); // Убедитесь, что useCreateDBs — это функция
+            onClose(); // Закрыть форму после успешной отправки
         } catch (err) {
             console.error('Error submitting form:', err);
         }
@@ -86,7 +86,7 @@ const FormComponent: React.FC<FormComponentProps> = ({ onClose }) => {
 
                 <button 
                     type="submit" 
-                    className="w-full bg-pink text-white font-bold py-3 rounded-2xl hover:bg-gray-800"
+                    className="w-full bg-pink-500 text-white font-bold py-3 rounded-2xl hover:bg-gray-800"
                 >
                     Send
                 </button>
