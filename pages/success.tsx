@@ -1,8 +1,10 @@
 "use client";
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import AudioPlayerDownloads from '@/components/AudioPlayerDownloads';
-import FormComponent from '@/components/FormComponent'; // Импортируем FormComponent
+import dynamic from 'next/dynamic';
+
+const AudioPlayerDownloads = dynamic(() => import('@/components/AudioPlayerDownloads'), { ssr: false });
+const FormComponent = dynamic(() => import('@/components/FormComponent'), { ssr: false });
 
 const Success: React.FC = () => {
     const router = useRouter();
