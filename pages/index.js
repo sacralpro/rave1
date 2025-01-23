@@ -5,12 +5,14 @@ import TopNav from "@/components/TopNav";
 import { motion, AnimatePresence } from "framer-motion";
 import AudioPlayer from "@/components/AudioPlayer";
 import getStripe from "@/libs/getStripe";
-
+import dynamic from "next/dynamic";
 
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const AudioPlayer = dynamic(() => import('@/components/AudioPlayer'), { ssr: false });
+
 
   const handlePayment = async () => {
     try {
