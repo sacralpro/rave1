@@ -3,7 +3,7 @@ import styles from "@/styles/Home.module.css";
 import { useEffect, useRef, useState } from "react";
 import TopNav from "@/components/TopNav";
 import { motion, AnimatePresence } from "framer-motion";
-import AudioPlayer from "@/components/AudioPlayer";
+//import AudioPlayer from "@/components/AudioPlayer";
 import getStripe from "@/libs/getStripe";
 import dynamic from "next/dynamic";
 
