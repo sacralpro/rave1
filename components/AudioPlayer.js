@@ -8,63 +8,66 @@ const AudioPlayer = () => {
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [hasPlayed, setHasPlayed] = useState(false); //Track if played by user
+  const [firstLoad, setFirstLoad] = useState(true); // Track first load
+
 
   useEffect(() => {
     const handleTimeUpdate = () => {
       setCurrentTime(audioRef.current?.currentTime || 0);
       setDuration(audioRef.current?.duration || 0);
-      console.log("Time update:", { currentTime, duration }); // Log time updates
     };
+
     const handleAudioError = (e) => {
       console.error("Error playing audio:", e);
-      console.log("Audio Error:", audioRef.current);
     };
+
     const handleLoadedMetadata = () => {
+      if (audioRef.current && firstLoad) {
         setDuration(audioRef.current.duration);
-        console.log("Metadata loaded:", { duration }); // Log duration after metadata load
-        //Attempt autoplay after metadata is loaded
-        if(audioRef.current){
-            audioRef.current.play().catch(error => {
-                console.warn("Autoplay prevented:", error);
-                setPlaying(false);
-            });
-        }
-    }
+        //Attempt autoplay only on first load
+        audioRef.current.muted = false; // Unmute after metadata loads
+        audioRef.current.play().catch(error => {
+          console.warn("Autoplay prevented:", error);
+          setPlaying(false);
+        });
+        setPlaying(true); // Set playing state to true after autoplay attempt
+        setFirstLoad(false); //Set firstLoad to false after autoplay
+      }
+    };
 
+    const attachListeners = () => {
+      if (audioRef.current) {
+        audioRef.current.addEventListener("timeupdate", handleTimeUpdate);
+        audioRef.current.addEventListener("error", handleAudioError);
+        audioRef.current.addEventListener("loadedmetadata", handleLoadedMetadata);
+      }
+    };
 
-    if (audioRef.current) {
-      audioRef.current.addEventListener("timeupdate", handleTimeUpdate);
-      audioRef.current.addEventListener("error", handleAudioError);
-      audioRef.current.addEventListener("loadedmetadata", handleLoadedMetadata);
-    }
-
-    return () => {
+    const detachListeners = () => {
       if (audioRef.current) {
         audioRef.current.removeEventListener("timeupdate", handleTimeUpdate);
         audioRef.current.removeEventListener("error", handleAudioError);
         audioRef.current.removeEventListener("loadedmetadata", handleLoadedMetadata);
       }
     };
+
+    attachListeners();
+    return detachListeners;
   }, []);
+
 
   const handlePlayPause = () => {
     if (audioRef.current) {
-      console.log("Play/pause button clicked. Audio state:", audioRef.current.readyState);
-      console.log("Current time:", audioRef.current.currentTime);
-      console.log("Duration:", audioRef.current.duration);
-      console.log("Paused?", audioRef.current.paused);
-      console.log("Playing?", playing);
-
       if (playing) {
         audioRef.current.pause();
       } else {
-        // Check if the audio is ready to play before attempting to play
-        if (audioRef.current.readyState >= 2) { // HAVE_CURRENT_DATA (2) or higher
+        if (audioRef.current.readyState >= 2) {
           audioRef.current.play().catch(error => {
-              console.warn("Play prevented:", error);
+            console.warn("Play prevented:", error);
           });
         } else {
-          console.warn("Audio not ready to play yet.  readyState:", audioRef.current.readyState);
+          console.warn("Audio not ready to play yet.");
         }
       }
       setPlaying(!playing);
@@ -81,7 +84,6 @@ const AudioPlayer = () => {
     const percentage = clickX / width;
     audioRef.current.currentTime = percentage * duration;
     setCurrentTime(audioRef.current.currentTime);
-    console.log("Progress bar clicked:", { percentage, currentTime }); //Log progress bar click
   };
 
   return (
@@ -105,7 +107,7 @@ const AudioPlayer = () => {
       >
         {playing ? <FaPause /> : <FaPlay />}
       </button>
-      <audio ref={audioRef} src="Rave.mp3" />
+      <audio ref={audioRef} src="Rave.mp3" preload="auto" />
     </div>
   );
 };

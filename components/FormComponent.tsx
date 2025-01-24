@@ -86,7 +86,7 @@ const FormComponent: React.FC<FormComponentProps> = ({ onClose }) => {
 
                 <button 
                     type="submit" 
-                    className="w-full bg-pink-500 text-white font-bold py-3 rounded-2xl hover:bg-gray-800"
+                    className="w-full bg-pink-500 text-white font-bold py-3 rounded-2xl hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2"
                 >
                     Send
                 </button>

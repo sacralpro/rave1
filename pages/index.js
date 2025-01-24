@@ -6,12 +6,16 @@ import { motion, AnimatePresence } from "framer-motion";
 //import AudioPlayer from "@/components/AudioPlayer";
 import getStripe from "@/libs/getStripe";
 import dynamic from "next/dynamic";
+import Popup from '@/components/About'; // Adjust path as needed
+ 
 
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const AudioPlayer = dynamic(() => import('@/components/AudioPlayer'), { ssr: false });
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false); 
 
 
   const handlePayment = async () => {
@@ -55,6 +59,9 @@ export default function Home() {
     }
   };
   
+  const handleAboutClick = () => {
+    setIsPopupOpen(true);
+  };
 
 
   useEffect(() => {
@@ -71,11 +78,11 @@ export default function Home() {
       <Head>
         <title>AUDENTITY GHOST</title>
         <meta name="description" content="POWERFUL MINIMAL-TECHNO TRACK BY AUDENTITY GHOST REMIXED BY SACRAL DJ" />
-        <meta name="keywords" content="sacral dj, rave, audentity ghost, minimalist techno, electronic music, dj gig, booking, music album, sasha, alexandr shaginov, idall lab, sacral track, rave, its rave, it's rave, idalllab" />
+        <meta name="keywords" content="sacral dj, rave, audentity ghost, minimal techno, electronic music, dj gig, booking, music album, sasha, alexandr shaginov, idall lab, sacral track, rave, its rave, it's rave, idalllab" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta property="og:title" content="RAVE BY AUDENTITY GHOST" />
         <meta property="og:description" content="Must have super powerful minimal-techno remix by Sacral dJ for great sound producer Audentity Ghost!" />
-        <meta property="og:image" content="/images/preview.png" />
+        <meta property="og:image" content="/images/back.png" />
         <meta property="og:url" content="https://ravers.vercel.app/" />
         <link rel="icon" href="/images/favicon.ico" />
       </Head>
@@ -111,7 +118,7 @@ export default function Home() {
           }}
           className="fixed w-full top-0 z-50"
         >
-          <TopNav setMenuOpen={setMenuOpen} />
+        <TopNav onAboutClick={handleAboutClick} />
         </motion.div>
 
 
@@ -152,6 +159,8 @@ export default function Home() {
           {!menuOpen && <AudioPlayer />}
         </motion.div>
       </motion.div>
+      {isPopupOpen && <Popup onClose={() => setIsPopupOpen(false)} />}
+
     </div>
   );
 }

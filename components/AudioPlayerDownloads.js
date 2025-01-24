@@ -1,36 +1,37 @@
 "use client";
-
 import { useRef, useEffect, useState } from "react";
-import { FaPlay, FaPause, FaDownload } from "react-icons/fa"; // Импортируем иконки
+import { FaPlay, FaPause, FaDownload } from "react-icons/fa";
+import Image from 'next/image';
+
 
 const AudioPlayerDownloads = () => {
     const audioRefs = useRef([]);
     const [playingTrackIndex, setPlayingTrackIndex] = useState(null);
 
-    // Обновленный массив треков с указанием .wav для загрузки и .mp3 для воспроизведения
     const tracks = [
         { id: 1, src: "/Rave.mp3", downloadSrc: "/Audentity_Ghost_-_Rave_(Sacral_dJ_Remix).wav", title: "AUDENTITY GHOST - RAVE (SACRAL dJ REMIX)" },
     ];
 
     useEffect(() => {
         const audioElements = audioRefs.current;
+        const timeUpdateHandlers = [];
 
-        audioElements.forEach(audio => {
+        audioElements.forEach((audio, index) => {
             const handler = () => {
                 if (audio) {
-                    const progressBar = document.getElementById(`progress-bar-${audio.dataset.index}`);
+                    const progressBar = document.getElementById(`progress-bar-${index}`);
                     if (progressBar) {
                         progressBar.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
                     }
                 }
             };
-            
+            timeUpdateHandlers[index] = handler;
             audio.addEventListener("timeupdate", handler);
         });
 
         return () => {
-            audioElements.forEach(audio => {
-                audio.removeEventListener("timeupdate", handler);
+            audioElements.forEach((audio, index) => {
+                audio.removeEventListener("timeupdate", timeUpdateHandlers[index]);
             });
         };
     }, []);
@@ -51,7 +52,6 @@ const AudioPlayerDownloads = () => {
                 if (playingTrackIndex !== null) {
                     audioRefs.current[playingTrackIndex].pause();
                 }
-
                 await audioEl.play();
                 setPlayingTrackIndex(index);
             }
@@ -62,7 +62,7 @@ const AudioPlayerDownloads = () => {
 
     const handleProgressClick = (e, index) => {
         const audioEl = audioRefs.current[index];
-        if (!audioEl) return;
+        if (!audioEl || audioEl.duration === 0) return;
 
         const rect = e.currentTarget.getBoundingClientRect();
         const clickX = e.clientX - rect.left;
@@ -72,52 +72,50 @@ const AudioPlayerDownloads = () => {
     };
 
     return (
-        <div className="flex flex-col items-center w-full mb-4">
-            {tracks.map((track, index) => (
-                <div
-                    key={track.id}
-                    className={`relative flex flex-col text-white rounded-lg mx-2 my-2 bg-gray-900 ${playingTrackIndex === index ? "border-2 border-pink-400" : ""} p-2`}
-                    style={{ width: '600px', height: '100px' }}
-                >
-                    <div className="flex items-center justify-between w-full">
-                        <button onClick={() => handleTrackClick(index)} className="text-white">
-                            {playingTrackIndex === index ? <FaPause /> : <FaPlay />}
+        <div className="relative w-full max-w-[600px] h-[500px] bg-gray-800 rounded-2xl overflow-hidden">
+            <Image
+                src="/player.png" // Replace with your image path
+                alt="Track Artwork"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-t-lg mb-4"
+            />
+            <div className="absolute bottom-0 left-0 w-full h-[100px] p-12 mb-5">
+                {tracks.map((track, index) => (
+                    <div key={track.id} className="flex items-center justify-between">
+                        <button onClick={() => handleTrackClick(index)} className="text-white p-2">
+                            {playingTrackIndex === index ? <FaPause size={24}/> : <FaPlay size={24} />}
                         </button>
-                        <span className="flex-grow text-left ml-2">{track.title}</span>
-                        <a href={track.downloadSrc} download className="text-pink-400">
-                            <FaDownload />
-                        </a>
-                    </div>
-                    <div
-                        className="w-full h-1 bg-gray-600 mt-2 cursor-pointer rounded-full"
-                        onClick={(e) => handleProgressClick(e, index)}
-                    >
+                        <div className="flex-grow text-left ml-2">
+                            <span className="text-lg absolute top-0 left-12">{track.title}</span>
+                        </div>
+                       
                         <div
-                            id={`progress-bar-${index}`}
-                            style={{
-                                width: "0%",
-                                height: "100%",
-                                backgroundColor: "pink",
-                                transition: "width 0.2s ease",
-                            }}
+                            className="w-full h-1 bg-white mt-2 cursor-pointer rounded-full"
+                            onClick={(e) => handleProgressClick(e, index)}
+                        >
+                            <div
+                                id={`progress-bar-${index}`}
+                                style={{
+                                    width: "0%",
+                                    height: "100%",
+                                    backgroundColor: "pink",
+                                    transition: "width 0.2s ease",
+                                }}
+                            />
+                        </div>
+                        <a href={track.downloadSrc} download className="text-white ml-2 p-2">
+                            <FaDownload size={24} />
+                        </a>
+                        <audio
+                            ref={(el) => (audioRefs.current[index] = el)}
+                            src={track.src}
+                            preload="auto"
+                            data-index={index}
                         />
                     </div>
-                    <audio
-                        ref={(el) => (audioRefs.current[index] = el)}
-                        src={track.src}
-                        preload="auto"
-                        data-index={index}
-                    />
-                </div>
-            ))}
-            <style jsx>{`
-                @media (max-width: 640px) { 
-                    div {
-                        width: 100%;
-                        height: auto;
-                    }
-                }
-            `}</style>
+                ))}
+            </div>
         </div>
     );
 };

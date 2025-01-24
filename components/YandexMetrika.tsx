@@ -8,7 +8,7 @@ type Props = {
   enabled: boolean;
 };
 
-const YM_COUNTER_ID = 99411982; // Correct counter ID
+const YM_COUNTER_ID = 99645466; // Updated counter ID
 
 const YandexMetrika: React.FC<Props> = ({ enabled }) => {
   const hit = useCallback(
@@ -24,7 +24,10 @@ const YandexMetrika: React.FC<Props> = ({ enabled }) => {
 
   useEffect(() => {
     if (enabled) {
+      // Initial hit after component mounts
       hit(window.location.pathname + window.location.search);
+
+      // Hit on route changes
       Router.events.on("routeChangeComplete", (url: string) => hit(url));
     }
     return () => {
@@ -39,7 +42,7 @@ const YandexMetrika: React.FC<Props> = ({ enabled }) => {
       accounts={[YM_COUNTER_ID]}
       options={{
         defer: true,
-        webvisor: true,
+        webvisor: true, // Consider removing if not needed
         clickmap: true,
         trackLinks: true,
         accurateTrackBounce: true,
