@@ -100,14 +100,3 @@ canvas {
 body {
   font-family: 'Gotham Pro', sans-serif;
 }
-
-.marquee {
-  white-space: nowrap;
-  overflow: hidden;
-  animation: marquee 15s linear infinite; /* Adjust duration (15s) and speed as needed */
-}
-
-@keyframes marquee {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
-}
