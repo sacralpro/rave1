@@ -1,7 +1,8 @@
 "use client";
+
 import { useRef, useEffect, useState } from "react";
 import { FaPlay, FaPause, FaDownload } from "react-icons/fa";
-import Image from 'next/image';
+import Image from 'next/image'; // Import Image component
 
 const AudioPlayerDownloads = () => {
     const audioRefs = useRef([]);
@@ -57,7 +58,15 @@ const AudioPlayerDownloads = () => {
     
     return (
         <div className="relative w-full max-w-[300px] h-[300px] bg-gray-800 rounded-2xl overflow-hidden">
-            {/* ... Image remains the same ... */}
+           <div className="relative w-full h-full"> {/* Container for image */}
+                <Image
+                    src="/player.png"
+                    alt="Track Artwork"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-2xl"
+                />
+            </div>
             <div className="absolute bottom-0 left-0 w-full p-4">
                 {tracks.map((track, index) => (
                     <div key={track.id} className="flex items-center justify-between mb-2">
@@ -65,8 +74,8 @@ const AudioPlayerDownloads = () => {
                             {playingTrackIndex === index ? <FaPause size={20} /> : <FaPlay size={20} />}
                         </button>
                         <div className="flex-grow text-left ml-2 text-white">
-                            <span className={styles.marquee}>{track.title}</span>
-                        </div>
+                            <span className="">{track.title}</span>
+                        </div>{/* 
                         <div
                             className="w-full h-1 bg-gray-600 rounded-full mt-1 cursor-pointer"
                             onClick={(e) => handleProgressClick(e, index)}
@@ -79,7 +88,7 @@ const AudioPlayerDownloads = () => {
                                     transition: "width 0.2s ease",
                                 }}
                             />
-                        </div>
+                        </div> */}
                     </div>
                 ))}
                 <button
