@@ -43,13 +43,13 @@ const Popup: React.FC<PopupProps> = ({ onClose }) => {
       initial="hidden"
       animate="visible"
       exit="hidden"
-      className="fixed inset-0 bg-black bg-opacity-100 z-[3330]" // Removed flex and items-center
+      className="fixed inset-0 bg-black bg-opacity-100 z-[3330]"
     >
       <motion.div
         variants={exitVariants}
         initial="visible"
         animate="visible"
-        className="absolute inset-0 flex justify-center items-center" // Absolute positioning for centering
+        className="absolute inset-0 flex justify-center items-center"
       >
         <button
           onClick={onClose}
@@ -62,21 +62,28 @@ const Popup: React.FC<PopupProps> = ({ onClose }) => {
           variants={textVariants}
           initial="hidden"
           animate="visible"
-          className="text-center p-8 rounded-lg" // Removed bg-white and shadow
+          className="text-center p-8 rounded-lg"
         >
           <motion.h2 className="text-2xl font-bold mb-4" variants={textVariants} initial="hidden" animate="visible">
-            Remix on the RAVE
+            Experience the RAVE - A Minimal Techno Masterpiece
           </motion.h2>
+          
+          <img 
+            src="/path/to/image.jpg" 
+            alt="Audentity Ghost live performance at a minimal techno rave" 
+            className="rounded-lg hidden mb-4" 
+          />
+
           <motion.p className="text-gray-400 mb-6 max-w-[600px] text-xl leading-[2.4]" variants={textVariants} initial="hidden" animate="visible">
-            A mystical Sacral dJ remix of RAVE by rising techno star Audentity Ghost. Exclusively available on Sacral Track and released on the legendary IDALL Lab label. RAVE delivers a powerful minimal techno sound, captivating listeners with its synths and ethereal vocals.
+            Discover the mystical Sacral DJ remix of <strong>RAVE</strong> by rising techno star <strong>Audentity Ghost</strong>! Exclusively available on <a className="underline" href="https://sacraltrack.store" target="_blank" rel="noopener noreferrer">Sacral Track</a> and released on the legendary <strong>IDALL Lab</strong>. This remix delivers a powerful minimal techno sound, captivating listeners with magnificent synths, deep basslines, and ethereal vocals. Immerse yourself in the underground vibes of the minimal techno scene and let the music take over your soul!
           </motion.p>
 
           <motion.div variants={buttonVariants} initial="hidden" animate="visible" className="flex flex-wrap gap-4 justify-center">
             <a href="https://sacraltrack.store" target="_blank" rel="noopener noreferrer" className="rounded-2xl underline text-white font-bold py-3 px-4 focus:outline-none">
-              Go Sacral Track
+              Go to Sacral Track
             </a>
             <a href="https://soundcloud.com/audentityghost" target="_blank" rel="noopener noreferrer" className="underline text-white font-bold py-3 px-4 rounded-2xl focus:outline-none">
-              Audentity Ghost
+              Follow Audentity Ghost
             </a>
           </motion.div>
         </motion.div>
