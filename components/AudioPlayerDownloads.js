@@ -2,6 +2,7 @@
 import { useRef, useEffect, useState } from "react";
 import { FaPlay, FaPause, FaDownload } from "react-icons/fa";
 import Image from 'next/image';
+import styles from '@/styles/audioPlayer.module.css';
 
 
 const AudioPlayerDownloads = () => {
@@ -70,28 +71,30 @@ const AudioPlayerDownloads = () => {
 
         audioEl.currentTime = percentage * audioEl.duration;
     };
-
+    
     return (
-        <div className="relative w-full max-w-[600px] h-[500px] bg-gray-800 rounded-2xl overflow-hidden">
-            <Image
-                src="/player.png" // Replace with your image path
-                alt="Track Artwork"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-t-lg mb-4"
-            />
-            <div className="absolute bottom-0 left-0 w-full h-[100px] p-12 mb-5">
+        <div className="relative w-full max-w-[300px] h-[300px] bg-gray-800 rounded-2xl overflow-hidden"> {/* Adjusted size */}
+            <div className="relative w-full h-full"> {/* Container for image */}
+                <Image
+                    src="/player.png"
+                    alt="Track Artwork"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-2xl"
+                />
+            </div>
+            <div className="absolute bottom-0 left-0 w-full p-4"> {/* Progress bar and buttons */}
                 {tracks.map((track, index) => (
-                    <div key={track.id} className="flex items-center justify-between">
-                        <button onClick={() => handleTrackClick(index)} className="text-white p-2">
-                            {playingTrackIndex === index ? <FaPause size={24}/> : <FaPlay size={24} />}
+                    <div key={track.id} className="flex items-center justify-between mb-2">
+                        <button onClick={() => handleTrackClick(index)} className="bg-gray-700 hover:bg-gray-600 text-white p-2 rounded">
+                            {playingTrackIndex === index ? <FaPause size={20} /> : <FaPlay size={20} />}
                         </button>
-                        <div className="flex-grow text-left ml-2">
-                            <span className="text-lg absolute top-0 left-12">{track.title}</span>
+                        <div className="flex-grow text-left ml-2 text-white">
+                        <span className={styles.marquee} >{track.title}</span> {/* Use styles.marquee */}
+                        {/* Truncate long titles */}
                         </div>
-                       
                         <div
-                            className="w-full h-1 bg-white mt-2 cursor-pointer rounded-full"
+                            className="w-full h-1 bg-gray-600 rounded-full mt-1"
                             onClick={(e) => handleProgressClick(e, index)}
                         >
                             <div
@@ -104,18 +107,25 @@ const AudioPlayerDownloads = () => {
                                 }}
                             />
                         </div>
-                        <a href={track.downloadSrc} download className="text-white ml-2 p-2">
-                            <FaDownload size={24} />
-                        </a>
-                        <audio
-                            ref={(el) => (audioRefs.current[index] = el)}
-                            src={track.src}
-                            preload="auto"
-                            data-index={index}
-                        />
                     </div>
                 ))}
+                <button
+                    className="w-full bg-black text-white p-2 rounded-lg hover:bg-pink-500 hover:shadow-lg hover:shadow-pink-500/50 transition-colors duration-300 mt-2"
+                >
+                    <a href={tracks[0].downloadSrc} download className="flex items-center">
+                        <FaDownload size={16} className="mr-2" /> Download
+                    </a>
+                </button>
             </div>
+            {tracks.map((track, index) => (
+                <audio
+                    key={track.id}
+                    ref={(el) => (audioRefs.current[index] = el)}
+                    src={track.src}
+                    preload="auto"
+                    data-index={index}
+                />
+            ))}
         </div>
     );
 };

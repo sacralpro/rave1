@@ -18,7 +18,7 @@ const Success: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-5">
-            <p className="text-lg mb-4">Here you can download wav track. Enjoy {sessionId}</p>
+            <p className="text-lg mb-4"> {sessionId}</p>
             <AudioPlayerDownloads />
             {isFormVisible && <FormComponent onClose={handleFormClose} />} {/* Используем новый компонент */}
         </div>
