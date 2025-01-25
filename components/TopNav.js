@@ -10,13 +10,18 @@ const TopNav = ({ onAboutClick }) => {
       setIsMobile(window.innerWidth < 768);
     };
 
-    handleResize(); 
-    window.addEventListener('resize', handleResize);
+    //Call handleResize initially, only if the browser is available (client-side)
+    if (typeof window !== 'undefined') {
+      handleResize();
+      window.addEventListener('resize', handleResize);
+    }
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
     };
-  }, []); 
+  }, []);
 
   return (
     <div className="relative z-1020" ref={navRef}>
@@ -35,7 +40,7 @@ const TopNav = ({ onAboutClick }) => {
           </div>
 
           <div className="text-center text-white ml-8 md:ml-[-120px]">
-          <div onClick={onAboutClick} className="cursor-pointer underline">about</div>
+            <div onClick={onAboutClick} className="cursor-pointer underline">about</div>
           </div>
 
           <a href="https://idalllab.webflow.io/" target="_blank" rel="noopener noreferrer">
