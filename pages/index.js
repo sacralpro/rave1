@@ -190,8 +190,7 @@ export default function Home() {
       <SupportButton onClick={handleSupportClick} />
        </div>
 
-      <YandexMetrika enabled={analyticsEnabled} />
-
+       <YandexMetrika /> 
     </div>
   );
 }
