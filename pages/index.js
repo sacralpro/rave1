@@ -10,6 +10,8 @@ import Popup from '@/components/About'; // Adjust path as needed
 import YandexMetrika from '@/components/YandexMetrika'; // Make sure the path is correct based on your structure.
 import Lottie from 'lottie-react';
 import animationData from '@/public/lottie/btn.json';
+import SupportButton from '@/components/Support'; // Путь к вашему компоненту
+
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -19,6 +21,10 @@ export default function Home() {
   const [hovering, setHovering] = useState(false);
 
   const analyticsEnabled = process.env.NODE_ENV === 'production'; // Define here
+
+  const handleSupportClick = () => {
+    window.open('https://t.me/sashaplayra', '_blank');
+  };
 
 
   const handlePayment = async () => {
@@ -179,6 +185,10 @@ export default function Home() {
       </motion.div>
       
       {isPopupOpen && <Popup onClose={() => setIsPopupOpen(false)} />}
+
+      <div className="absolute bottom-5 right-5 z-[200] cursor-pointer">
+      <SupportButton onClick={handleSupportClick} />
+       </div>
 
       <YandexMetrika enabled={analyticsEnabled} />
 

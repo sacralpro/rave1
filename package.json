@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mui/icons-material": "^6.4.1",
     "@stripe/stripe-js": "^5.4.0",
     "appwrite": "^16.1.0",
     "fabric": "^5.5.1",
