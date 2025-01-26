@@ -1,3 +1,4 @@
+"use client";
 import { database, ID } from '@/libs/AppWriteClient';
 
 const useCreateDBs = async (telegram: string, email: string): Promise<boolean> => {
