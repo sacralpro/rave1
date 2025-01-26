@@ -1,64 +1,70 @@
 "use client";
 
-import Router from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
-import ym, { YMInitializer } from "react-yandex-metrika";
+import { useRouter } from 'next/navigation';
+import React, { useCallback, useEffect, useState } from 'react';
+import ym, { YMInitializer } from 'react-yandex-metrika';
 
 type Props = {
   enabled: boolean;
 };
 
-const YM_COUNTER_ID = 99645466; // Updated counter ID
-
 const YandexMetrika: React.FC<Props> = ({ enabled }) => {
-  const [currentPath, setCurrentPath] = useState<string | null>(null);
+  const router = useRouter();
+  const [currentPath, setCurrentPath] = useState<string>('/'); // Default to '/'
+  const yandexMetrikaIdString = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
+  const yandexMetrikaId = yandexMetrikaIdString ? parseInt(yandexMetrikaIdString, 10) : undefined;
 
   const hit = useCallback(
     (url: string) => {
-      if (enabled) {
-        ym("hit", url);
+      if (enabled && yandexMetrikaId && typeof window !== 'undefined') { //Added window check
+        ym('hit', url);
+      } else if (!yandexMetrikaId) {
+        console.warn(
+          "Yandex Metrika ID not set or invalid. Please set NEXT_PUBLIC_YANDEX_METRIKA_ID environment variable to a valid number."
+        );
       } else {
         console.log(`%c[YandexMetrika](HIT)`, `color: orange`, url);
       }
     },
-    [enabled]
+    [enabled, yandexMetrikaId]
   );
 
   useEffect(() => {
-    const handleRouteChange = (url: string) => {
-      setCurrentPath(url);
-      hit(url);
-    };
+    let handleRouteChange: () => void; // Declare handleRouteChange here
 
-    if (enabled) {
-      // Initial hit after component mounts, but only if currentPath has been updated.
-      const handleInitialHit = () => {
-        if (currentPath) { //Check if currentPath has a value.  It's asynchronous
-          hit(currentPath);
+    if (enabled && yandexMetrikaId && typeof window !== 'undefined') { //Added window check
+      handleRouteChange = () => {
+        const newPath = window.location.pathname + window.location.search;
+        if (newPath !== currentPath) {
+          setCurrentPath(newPath);
+          hit(newPath);
         }
       };
-
-      //Use a timeout to ensure Router is ready before we try and access it, then clean up afterwards.
-      const timeout = setTimeout(handleInitialHit, 500);
-      Router.events.on("routeChangeComplete", handleRouteChange);
-      return () => {
-        clearTimeout(timeout);
-        Router.events.off("routeChangeComplete", handleRouteChange);
-      };
+      window.addEventListener('popstate', handleRouteChange);
     }
-  }, [hit, enabled, currentPath]); // currentPath added as dependency
 
+    return () => {
+      if (enabled && yandexMetrikaId && typeof window !== 'undefined' && handleRouteChange) { //Added window check and handleRouteChange check
+        window.removeEventListener('popstate', handleRouteChange);
+      }
+    };
+  }, [hit, enabled, currentPath, yandexMetrikaId]);
+
+
+  if (!yandexMetrikaId) {
+    return <div>Yandex Metrika ID not configured or invalid.</div>;
+  }
 
   return (
     <YMInitializer
-      accounts={[YM_COUNTER_ID]}
+      accounts={[yandexMetrikaId]}
       options={{
         defer: true,
-        webvisor: true, // Consider removing if not needed
+        webvisor: true,
         clickmap: true,
         trackLinks: true,
         accurateTrackBounce: true,
-        ecommerce: "dataLayer",
+        ecommerce: 'dataLayer',
       }}
       version="2"
     />

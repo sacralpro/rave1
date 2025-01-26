@@ -18,6 +18,9 @@ export default function Home() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [hovering, setHovering] = useState(false);
 
+  const analyticsEnabled = process.env.NODE_ENV === 'production'; // Define here
+
+
   const handlePayment = async () => {
     try {
       const stripe = await getStripe();
@@ -91,7 +94,6 @@ export default function Home() {
         <meta property="og:url" content="https://ravers.vercel.app/" />
         <link rel="icon" href="/images/favicon.ico" />
 
-        <YandexMetrika enabled={true} /> {/* Add Yandex Metrika here */}
       </Head>
 
       
@@ -177,6 +179,9 @@ export default function Home() {
       </motion.div>
       
       {isPopupOpen && <Popup onClose={() => setIsPopupOpen(false)} />}
+
+      <YandexMetrika enabled={analyticsEnabled} />
+
     </div>
   );
 }
