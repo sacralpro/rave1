@@ -87,19 +87,21 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta property="og:title" content="RAVE BY AUDENTITY GHOST - Minimal Techno Remix" />
         <meta property="og:description" content="Dive into the powerful sounds of minimal techno with this remix by Sacral DJ. Perfect for your next rave!" />
-        <meta property="og:image" content="/images/back.png" />
+        <meta property="og:image" content="/images/back.jpg" />
         <meta property="og:url" content="https://ravers.vercel.app/" />
         <link rel="icon" href="/images/favicon.ico" />
+
+        <YandexMetrika enabled={true} /> {/* Add Yandex Metrika here */}
       </Head>
 
-      <YandexMetrika enabled={true} /> {/* Add Yandex Metrika here */}
+      
 
       <AnimatePresence>
         {isLoading && (
           <motion.div
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-[#030504] flex justify-center items-center z-50"
+            className="fixed inset-0 bg-[#000000] flex justify-center items-center z-50"
           >
             <img src="/preloader.gif" alt="Loader" className="w-50" />
           </motion.div>
