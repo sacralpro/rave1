@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 
@@ -13,9 +13,15 @@ const FormComponent = dynamic(() => import('@/components/FormComponent'), {
 });
 
 export default function Success() {
-    const searchParams = useSearchParams();
     const [isFormVisible, setIsFormVisible] = useState(true);
-    const sessionId = searchParams.get('session_id') || '';
+    const [sessionId, setSessionId] = useState('');
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const searchParams = useSearchParams();
+            setSessionId(searchParams.get('session_id') || '');
+        }
+    }, []);
 
     const handleFormClose = () => {
         setIsFormVisible(false);
@@ -29,4 +35,3 @@ export default function Success() {
         </div>
     );
 }
-

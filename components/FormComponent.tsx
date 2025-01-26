@@ -27,9 +27,11 @@ const FormComponent: React.FC<FormComponentProps> = ({ onClose }) => {
             const success = await useCreateDBs(telegram, email);
             if (success) {
                 setSuccess(true);
-                setTimeout(() => {
-                    onClose();
-                }, 2000); // Close after 2 seconds to show success animation
+                if (typeof window !== 'undefined') {
+                    setTimeout(() => {
+                        onClose();
+                    }, 2000); // Close after 2 seconds to show success animation
+                }
             }
         } catch (err: any) {
             setError(err.message);

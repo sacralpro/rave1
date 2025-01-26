@@ -66,18 +66,22 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
+    if (typeof window !== 'undefined') {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   const handleMouseEnter = () => {
-    setHovering(true);
-    // Start a timer to play the animation after 1 second
-    animationTimeout = setTimeout(() => {
-      setPlayAnimation(true);
-    }, 3000);
+    if (typeof window !== 'undefined') {
+      setHovering(true);
+      // Start a timer to play the animation after 1 second
+      animationTimeout = setTimeout(() => {
+        setPlayAnimation(true);
+      }, 3000);
+    }
   };
 
 
