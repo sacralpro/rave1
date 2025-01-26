@@ -1,3 +1,5 @@
+"use client";
+
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import TopNav from "@/components/TopNav";
@@ -8,6 +10,7 @@ import Popup from '@/components/About'; // Adjust path as needed
 import YandexMetrika from '@/components/YandexMetrika'; // Make sure the path is correct based on your structure.
 import Lottie from 'lottie-react';
 import animationData from '@/public/lottie/btn.json';
+
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
