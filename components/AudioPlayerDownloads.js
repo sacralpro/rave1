@@ -11,7 +11,7 @@ export default function AudioPlayerDownloads() {
     const track = {
         id: 1,
         src: "/Rave.mp3",
-        downloadSrc: "/Audentity_Ghost_-_Rave_(Sacral_dJ_Remix).wav",
+        downloadSrc: "/Audentity_Ghost_-_Rave_(Sacral_dJ_Remix)_IDALLLab.wav",
         title: "AUDENTITY GHOST - RAVE (SACRAL dJ REMIX)"
     };
 
