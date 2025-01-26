@@ -72,6 +72,14 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
+  const handleMouseEnter = () => {
+    setHovering(true);
+    // Start a timer to play the animation after 1 second
+    animationTimeout = setTimeout(() => {
+      setPlayAnimation(true);
+    }, 3000);
+  };
+
 
 
 

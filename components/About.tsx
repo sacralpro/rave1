@@ -82,10 +82,10 @@ const Popup: React.FC<PopupProps> = ({ onClose }) => {
 
           <motion.div variants={buttonVariants} initial="hidden" animate="visible" className="flex flex-wrap gap-4 justify-center">
             <a href="https://sacraltrack.store" target="_blank" rel="noopener noreferrer" className="rounded-2xl underline text-white font-bold py-3 px-4 focus:outline-none">
-              Go to Sacral Track
+              Go Sacral Track
             </a>
             <a href="https://soundcloud.com/audentityghost" target="_blank" rel="noopener noreferrer" className="underline text-white font-bold py-3 px-4 rounded-2xl focus:outline-none">
-              Follow Audentity Ghost
+              Audentity Ghost
             </a>
           </motion.div>
         </motion.div>
