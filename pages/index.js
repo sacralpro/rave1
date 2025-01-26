@@ -1,7 +1,7 @@
 "use client";
 
 import Head from "next/head";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import TopNav from "@/components/TopNav";
 import { motion, AnimatePresence } from "framer-motion";
 import getStripe from "@/libs/getStripe";
@@ -11,14 +11,12 @@ import YandexMetrika from '@/components/YandexMetrika'; // Make sure the path is
 import Lottie from 'lottie-react';
 import animationData from '@/public/lottie/btn.json';
 
-
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const AudioPlayer = dynamic(() => import('@/components/AudioPlayer'), { ssr: false });
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [hovering, setHovering] = useState(false);
-
 
   const handlePayment = async () => {
     try {
@@ -80,9 +78,6 @@ export default function Home() {
     }, 3000);
   };
 
-
-
-
   return (
     <div>
       <Head>
@@ -141,30 +136,31 @@ export default function Home() {
           <h2 className="text-white text-xl mb-8 mt-[0px]">REMIX BY SACRAL DJ</h2>
 
           <button
-          onClick={handlePayment}
-          onMouseEnter={() => setHovering(true)}
-          onMouseLeave={() => setHovering(false)}
-          className={`relative rounded-3xl px-9 py-4 mt-5 bg-black bg-opacity-30 text-white border-2 border-pink-500 shadow-md focus:outline-none ${hovering ? 'ring-2 ring-pink-500 ring-offset-2 ring-offset-pink-100' : ''}`}
-          style={{ transition: "transform 0.4s ease, box-shadow 0.3s ease" }}
-        >
-          {hovering && (
-            <div className="absolute inset-0 z-10">
-              <Lottie
-                animationData={animationData}
-                loop={true}
-                play
-                style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: -1 }} // Full coverage
-              />
-            </div>
-          )}
-          <span className="relative">GET IT RAVE!</span>
-        </button>
-
-
+            onClick={handlePayment}
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
+            className={`relative rounded-3xl px-9 py-4 mt-5 bg-black bg-opacity-30 text-white border-2 border-pink-500 shadow-md focus:outline-none ${hovering ? 'ring-2 ring-pink-500 ring-offset-2 ring-offset-pink-100' : ''}`}
+            style={{ transition: "transform 0.4s ease, box-shadow 0.3s ease" }}
+          >
+            {hovering && (
+              <div className="absolute inset-0 z-10">
+                <Lottie
+                  animationData={animationData}
+                  loop={true}
+                  play
+                  style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: -1 }} // Full coverage
+                />
+              </div>
+            )}
+            <span className="relative">GET IT RAVE!</span>
+          </button>
         </motion.div>
 
-        <div className="absolute z-[-1] back h-screen w-screen bg-[#030504] flex justify-center items-center md:mt-0 mt-[180px]">
-          <img src="/images/back.jpg" alt="Background" className="md:w-[60vw] md:mt-[100px] mt-0 w-full h-full object-cover opacity-93" />
+        <div className="absolute z-[1] h-screen w-screen flex justify-center items-center">
+          <video autoPlay loop muted className="object-cover w-full h-full opacity-93">
+            <source src="/back.webm" type="video/webm" />
+         
+          </video>
         </div>
 
         <motion.div
