@@ -11,6 +11,7 @@ import YandexMetrika from '@/components/YandexMetrika'; // Make sure the path is
 import Lottie from 'lottie-react';
 import animationData from '@/public/lottie/btn.json';
 import SupportButton from '@/components/Support'; // Путь к вашему компоненту
+import GoogleTagManager from '@/components/GoogleTagManager';
 
 
 export default function Home() {
@@ -99,10 +100,11 @@ export default function Home() {
         <meta property="og:image" content="/images/back.jpg" />
         <meta property="og:url" content="https://ravers.vercel.app/" />
         <link rel="icon" href="/images/favicon.ico" />
-
+        <YandexMetrika enabled={analyticsEnabled} /> {/* Pass enabled prop */}
+        <GoogleTagManager />
       </Head>
 
-      <YandexMetrika enabled={analyticsEnabled} /> {/* Pass enabled prop */}
+    
 
       <AnimatePresence>
         {isLoading && (
