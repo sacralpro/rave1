@@ -13,7 +13,11 @@ const YandexMetrika: React.FC<Props> = ({ enabled }) => {
   const hit = useCallback(
     (url: string) => {
       if (enabled) {
-        ym("hit", url);
+        try {
+          ym("hit", encodeURIComponent(url));
+        } catch (error) {
+          console.error("Yandex Metrika hit failed:", error, url);
+        }
       } else {
         console.log(`%c[YandexMetrika](HIT)`, `color: orange`, url);
       }
@@ -23,17 +27,19 @@ const YandexMetrika: React.FC<Props> = ({ enabled }) => {
 
   useEffect(() => {
     if (enabled) {
-      // Initial hit on page load
-      hit(window.location.pathname + window.location.search);
-
-      // Listen for changes in the URL (less accurate than Router)
-      const handlePopState = () => {
-        hit(window.location.pathname + window.location.search);
-      };
-      window.addEventListener('popstate', handlePopState);
-      return () => window.removeEventListener('popstate', handlePopState);
-
-
+      const intervalId = setInterval(() => {
+        if (typeof ym === 'function') {
+          clearInterval(intervalId);
+          hit(encodeURIComponent(window.location.pathname + window.location.search));
+          // Listen for changes in the URL (replace with Next.js router if applicable)
+          const handlePopState = () => {
+            hit(encodeURIComponent(window.location.pathname + window.location.search));
+          };
+          window.addEventListener('popstate', handlePopState);
+          return () => window.removeEventListener('popstate', handlePopState);
+        }
+      }, 100); // Check every 100ms. Adjust as needed.
+      return () => clearInterval(intervalId);
     }
   }, [hit, enabled]);
 
