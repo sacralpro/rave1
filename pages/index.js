@@ -102,7 +102,7 @@ export default function Home() {
 
       </Head>
 
-      
+      <YandexMetrika enabled={analyticsEnabled} /> {/* Pass enabled prop */}
 
       <AnimatePresence>
         {isLoading && (
@@ -190,7 +190,7 @@ export default function Home() {
       <SupportButton onClick={handleSupportClick} />
        </div>
 
-       <YandexMetrika /> 
-    </div>
+      
+       </div>
   );
 }
