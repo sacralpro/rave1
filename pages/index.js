@@ -6,13 +6,11 @@ import TopNav from "@/components/TopNav";
 import { motion, AnimatePresence } from "framer-motion";
 import getStripe from "@/libs/getStripe";
 import dynamic from "next/dynamic";
-import Popup from '@/components/About'; // Adjust path as needed
-import YandexMetrika from '@/components/YandexMetrika'; // Make sure the path is correct based on your structure.
+import Popup from "@/components/About"; 
 import Lottie from 'lottie-react';
 import animationData from '@/public/lottie/btn.json';
-import SupportButton from '@/components/Support'; // Путь к вашему компоненту
-import GoogleTagManager from '@/components/GoogleTagManager';
-
+import SupportButton from '@/components/Support';
+import YandexMetrika from '@/components/YandexMetrika';
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -20,8 +18,9 @@ export default function Home() {
   const AudioPlayer = dynamic(() => import('@/components/AudioPlayer'), { ssr: false });
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [hovering, setHovering] = useState(false);
+  const [playAnimation, setPlayAnimation] = useState(false);
+  const [analyticsEnabled, setAnalyticsEnabled] = useState(false); //add state
 
-  const analyticsEnabled = process.env.NODE_ENV === 'production'; // Define here
 
   const handleSupportClick = () => {
     window.open('https://t.me/sashaplayra', '_blank');
@@ -82,11 +81,17 @@ export default function Home() {
 
   const handleMouseEnter = () => {
     setHovering(true);
-    // Start a timer to play the animation after 1 second
     animationTimeout = setTimeout(() => {
       setPlayAnimation(true);
     }, 3000);
   };
+
+  const handleMouseLeave = () => {
+    setHovering(false);
+    clearTimeout(animationTimeout);
+    setPlayAnimation(false);
+  };
+
 
   return (
     <div>
@@ -100,11 +105,9 @@ export default function Home() {
         <meta property="og:image" content="/images/back.jpg" />
         <meta property="og:url" content="https://ravers.vercel.app/" />
         <link rel="icon" href="/images/favicon.ico" />
-        <YandexMetrika enabled={analyticsEnabled} /> {/* Pass enabled prop */}
-        <GoogleTagManager />
       </Head>
 
-    
+      <YandexMetrika enabled={analyticsEnabled} />
 
       <AnimatePresence>
         {isLoading && (
@@ -149,12 +152,12 @@ export default function Home() {
 
           <button
             onClick={handlePayment}
-            onMouseEnter={() => setHovering(true)}
-            onMouseLeave={() => setHovering(false)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             className={`relative rounded-3xl px-9 py-4 mt-5 bg-black bg-opacity-30 text-white border-2 border-pink-500 shadow-md focus:outline-none ${hovering ? 'ring-2 ring-pink-500 ring-offset-2 ring-offset-pink-100' : ''}`}
             style={{ transition: "transform 0.4s ease, box-shadow 0.3s ease" }}
           >
-            {hovering && (
+            {playAnimation && (
               <div className="absolute inset-0 z-10">
                 <Lottie
                   animationData={animationData}
@@ -171,7 +174,6 @@ export default function Home() {
         <div className="absolute z-[1] h-screen w-screen flex justify-center items-center">
           <video autoPlay loop muted className="object-cover w-full h-full opacity-93">
             <source src="/back.webm" type="video/webm" />
-         
           </video>
         </div>
 
@@ -185,14 +187,15 @@ export default function Home() {
           {!menuOpen && <AudioPlayer />}
         </motion.div>
       </motion.div>
-      
+
       {isPopupOpen && <Popup onClose={() => setIsPopupOpen(false)} />}
 
       <div className="absolute bottom-5 right-5 z-[200] cursor-pointer">
-      <SupportButton onClick={handleSupportClick} />
-       </div>
+        <SupportButton onClick={handleSupportClick} />
+      </div>
 
       
-       </div>
+
+    </div>
   );
 }
