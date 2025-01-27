@@ -47,7 +47,7 @@ const YandexMetrika: React.FC<Props> = ({ enabled }) => {
     <YMInitializer
       accounts={[YM_COUNTER_ID]}
       options={{
-        defer: true,
+        //defer: true,
         webvisor: true,
         clickmap: true,
         trackLinks: true,
